@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 
-const User = require('../Models/user.model');
+const User = require('../models/user.model');
+const UserProfile = require('../models/userProfile.model');
 const sessions = require('express-session');
+const { checkPassword } = require('../utils');
 
 
 async function handleRegister(req, res) {
@@ -13,8 +15,10 @@ async function handleRegister(req, res) {
         return res.status(400).json({ message: 'Confirm Password do not match' });
     }
     const user = new User(body);
+    const profile = new UserProfile({ user: user._id });
     try {
         await user.validateAndSave(body.password);
+        await profile.save();
         res.status(201).json({ message: 'User created' });
     } catch (err) {
         return res.status(400).json({ message: err.message });
@@ -30,7 +34,7 @@ async function handleLogin(req, res) {
     if (!user) {
         return res.status(404).json({ message: 'User not found. Please create new account' });
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.checkPassword(password, user.password);
     if (!isPasswordValid) {
         return res.status(401).json({ message: 'Invalid password' });
     }
@@ -48,12 +52,12 @@ async function handleLogin(req, res) {
             } else {
                 return res.status(200).json({
                     message: 'Successfully Logged in',
-                    sessionID: req.sessionID,
+                    
                 });
             }
         });
     });
-    // console.log(res.headers.cookies);
+    
 }
 
 async function handleLogout(req, res) {
@@ -67,5 +71,22 @@ async function handleLogout(req, res) {
     });
 }
 
+async function handleChangePassword(req, res) {
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    const user = await User.findById(req.session && req.session.userId);
+    if (!oldPassword || !newPassword || !confirmPassword) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Invalid password' });
+    }
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ message: 'Confirm Password do not match' });
+    }
+    await user.updatePassword(newPassword);
+    res.status(200).json({ message: 'Password updated' });
+}
 
-module.exports = { handleLogin, handleRegister, handleLogout };
+
+module.exports = { handleLogin, handleRegister, handleLogout, handleChangePassword};
