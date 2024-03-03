@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
-const authRoutes = require('./API/Routes/auth.routes');
+const authRoutes = require('./API/routes/auth.routes');
+const userRoutes = require('./API/routes/user.routes');
 const session = require('express-session');
 const MongoDBSession = require('connect-mongodb-session')(session);
 const DB_pass = process.env.DB_PASS;
@@ -57,18 +58,10 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'Hello World!'
-    });
-});
+app.use('/uploads', express.static('uploads'));
 
-app.get('/test', (req, res) => {
-    res.status(200).json({
-        message: 'Test route'
-    });
-});
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 
 app.use((res, req, next) => {
     const error = new Error('Not found');

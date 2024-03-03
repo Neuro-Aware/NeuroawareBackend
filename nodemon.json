@@ -1,6 +1,8 @@
 {
     "env": {
         "DB_PASS": "aauhQvWSb2cziDEl",
-        "SESSION_SECRET": "secretimportantkey"
+        "SESSION_SECRET": "secretimportantkey",
+        "EMAIL_USER": "rishi.jain2021@vitbhopal.ac.in",
+        "EMAIL_PASS": "cijo dxmw drtq pysc"
     }
 }
