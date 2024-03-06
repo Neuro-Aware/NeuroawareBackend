@@ -8,9 +8,11 @@ const profileSchema = mongoose.Schema({
     },
     name: {
         type: String,
+        default: 'Anonymous',
     },
     phoneNo: {
         type: Number,
+        default: 0,
     },
     profileImage: {
         type: String,
