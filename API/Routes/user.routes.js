@@ -41,8 +41,15 @@ router.get('/getMe', authMiddleware, (req, res) => {
 router.post('/updateDetails', authMiddleware, (req, res) => {
     controller.handleUpdateDetails(req, res);
 });
-
-router.post('/updateImage', authMiddleware, upload.single('profileImage'), (req, res) => {
+router.post('/updateImage', authMiddleware, (req, res, next) => {
+    // check if there is a file
+    console.log(req);
+    if (!req.files) {
+        console.log('No file uploaded');
+        // return res.status(400).json({ error: 'No file uploaded' });
+    }
+    next();
+}, upload.single('profileImage'), (req, res) => {
     controller.handleUpdateImage(req, res);
 });
 
