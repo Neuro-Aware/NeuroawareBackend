@@ -36,7 +36,7 @@ async function handleLogin(req, res) {
     }
     const isPasswordValid = await user.checkPassword(password, user.password);
     if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid password' });
+        return res.status(403).json({ message: 'Invalid password' });
     }
 
     console.log(req.session);
