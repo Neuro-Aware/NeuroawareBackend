@@ -12,6 +12,8 @@ const session = require('express-session');
 const MongoDBSession = require('connect-mongodb-session')(session);
 const DB_pass = process.env.DB_PASS;
 
+const multer = require('multer');
+
 const mongouri = `mongodb+srv://rishijain2607:${DB_pass}@auth.4icuyfv.mongodb.net/?retryWrites=true&w=majority&appName=Auth`
 mongoose.connect(mongouri, {
     useNewUrlParser: true,
@@ -30,6 +32,7 @@ const store = new MongoDBSession({
     uri: mongouri,
     collection: 'sessions'
 });
+
 store.on('error', function (error) {
     console.log(error);
 });
@@ -78,4 +81,4 @@ app.use((error, req, res, next) => {
     });
 });
 
-module.exports = app;
+module.exports = app
