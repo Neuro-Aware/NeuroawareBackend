@@ -23,7 +23,8 @@ const fileFilter = (req, file, cb) => {
     }
 }
 const upload = multer({
-    storage: storage, limits: {
+    storage: storage,
+    limits: {
         fileSize: 1024 * 1024 * 5
     },
     fileFilter: fileFilter
@@ -47,6 +48,8 @@ router.post('/updateImage', authMiddleware, (req, res, next) => {
     if (!req.files) {
         console.log('No file uploaded');
         // return res.status(400).json({ error: 'No file uploaded' });
+    } else{
+        log(req.files);
     }
     next();
 }, upload.single('profileImage'), (req, res) => {
