@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
-const authRoutes = require('./API/routes/auth.routes');
-const userRoutes = require('./API/routes/user.routes');
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
 const session = require('express-session');
 const MongoDBSession = require('connect-mongodb-session')(session);
 const DB_pass = process.env.DB_PASS;
