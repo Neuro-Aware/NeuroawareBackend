@@ -51,7 +51,7 @@ async function handleUpdateDetails(req, res) {
 
 async function handleUpdateImage(req, res) {
     const body = {
-        profileImage: req.file.path,
+        profileImage: req.file.location,
     };
 
     if (!body.profileImage) {
@@ -77,12 +77,9 @@ async function handleImageGet(req, res) {
     }
     if (!profile.profileImage) {
         res.status(200).sendFile('uploads/default-profile-picture1.jpg', { root: './' })
-    } else {
-        res.status(200).sendFile(profile.profileImage, { root: './' });
     }
-
-
-
+    
+    res.redirect(profile.profileImage);
 }
 
 

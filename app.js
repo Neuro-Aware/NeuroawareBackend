@@ -60,8 +60,9 @@ app.use((req, res, next) => {
     }
     next();
 });
-
-app.use('/uploads', express.static('uploads'));
+app.use("/heartbeat", (req, res) => {
+    res.send("OK");
+});
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
